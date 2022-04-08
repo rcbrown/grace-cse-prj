@@ -3,29 +3,37 @@
 def read_file(filename):
     """
         Opens the named file and returns a list of strings,
-        one for each line in the file
+        one for each line in the file.
     """
-    # This is fake for now
-    lines = []
-    return lines
+    file = open(filename, "r")
+    lines = file.readlines()
+    file.close()
+
+    # Remove the first line because it's a header
+    lines = lines[1:]
+
+    # lines is a list of strings, but each one ends with a newline we don't want;
+    # chop off the last character
+    trimmed_lines = []
+    for line in lines:
+        trimmed_lines.append(line[:-1])
+    
+    return trimmed_lines
 
 def build_car_dictionary(lines):
     """
         Given a list of strings in the format of each line of the CSV file,
-        produce the car dictionary 
+        produce the car dictionary.
     """
-    # Hardcoded for now
-    car_dictionary = {
-        "70 chevrolet chevelle malibu":
-            [ 18, 8, 307, 130, 3504, 12, 70, "usa", "chevrolet chevelle malibu" ],
-        "70 buick skylark 320":
-            [ 15, 8, 350, 165, 3693, 11.5, 70, "usa", "buick skylark 320" ],
-        "70 plymouth satellite":
-            [ 18, 8, 318, 150, 3436, 11, 70, "usa", "plymouth satellite" ],
-        "70 amc rebel sst":
-            [ 16, 8, 304, 150, 3433, 12, 70, "usa", "amc rebel sst" ],
-    }
+    car_dictionary = {}
 
+    for line in lines:
+        columns = line.split(",")
+        model_year = columns[6]
+        model = columns[8]
+        key = f"{model_year} {model}"
+        car_dictionary[key] = columns
+    
     return car_dictionary
 
 def best_mpg(parameter1, parameter2):
@@ -64,6 +72,7 @@ def get_menu_choice_from_user():
             return menu_choice
     
     print("Invalid selection - must be a number from 1 to 6")
+
     return 0
 
 def get_country_from_user():
@@ -115,6 +124,7 @@ def get_filename():
 filename = get_filename()
 lines = read_file(filename)
 car_dictionary = build_car_dictionary(lines)
+print(car_dictionary)
 
 menu_choice = 0
 while menu_choice != 6:
