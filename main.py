@@ -47,6 +47,8 @@ def build_car_dictionary(lines):
     
     return car_dictionary
 
+# Do parameters like this need to be literally "parameter1" and "parameter2"
+# like in the instructions?
 def best_mpg(car_dictionary, country):
     """
         Given the car dictionary and country, returns the mpg of the
@@ -94,11 +96,51 @@ def average_mpg(car_dictionary, country):
     return total_mpg / number_of_cars
 
 
-def print_models_above(car_dictionary, country, mpg):
-    pass
+def print_models_above(car_dictionary, country, min_mpg):
+    """
+        Prints a report of all the models in the dictionary having
+        an mpg higher than the requested mpg in the provided country.
+    """
+    print(f"Models from {country} with {min_mpg:.2f} or better:")
+    print(f"Model                                    Weight     Horsepower    Miles Per Gallon")
+    print("-" * 82)
+    
+    for key, value in car_dictionary.items():
+        current_country = value[6]
+        if current_country == country:
+            model = key
+            weight = value[4]
+            horsepower = value[3]
+            mpg = float(value[0])
+            if (mpg >= min_mpg):
+                print(f"{model:<40}{weight:>7}{horsepower:>15}{mpg:>20.2f}")
 
-def print_models_below(car_dictionary, country, mpg):
-    pass
+def print_models_below(car_dictionary, country, max_mpg):
+    """
+        Prints a report of all the models in the dictionary having
+        an mpg higher than the requested mpg in the provided country.
+    """
+    print(f"Models from {country} with {max_mpg:.2f} or lower:")
+    print(f"Model                                    Weight     Horsepower    Miles Per Gallon")
+    print("-" * 82)
+    
+    for key, value in car_dictionary.items():
+        current_country = value[6]
+        if current_country == country:
+            model = key
+            weight = value[4]
+            horsepower = value[3]
+            mpg = float(value[0])
+            if (mpg <= max_mpg):
+                print(f"{model:<40}{weight:>7}{horsepower:>15}{mpg:>20.2f}")
+
+def get_min_mpg_from_user():
+    print("Enter the mpg value models must be at or over:")
+    return float(input())
+
+def get_max_mpg_from_user():
+    print("Enter the mpg value models must be at or under:")
+    return float(input())
 
 def get_menu_choice_from_user():
     """
@@ -196,7 +238,9 @@ while menu_choice != 6:
         print(f"Average mpg from {chosen_country} is {average:.2f}")
 
     elif menu_choice == 4:
-        pass
+        min_mpg = get_min_mpg_from_user()
+        print_models_above(car_dictionary, chosen_country, min_mpg)
 
     elif menu_choice == 5:
-        pass
+        max_mpg = get_max_mpg_from_user()
+        print_models_below(car_dictionary, chosen_country, max_mpg)
