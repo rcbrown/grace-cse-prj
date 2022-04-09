@@ -32,23 +32,72 @@ def build_car_dictionary(lines):
         model_year = columns[6]
         model = columns[8]
         key = f"{model_year} {model}"
+
+        # The instructions say you can't include values in the list that were
+        # in the key or some tests will fail. This is not true. No function
+        # returns the dictionary, so there's no way for a test to examine it
+        # for extra data, and all the functions return the right values whether
+        # or not the extra fields are there. But I'll take them out because a
+        # person examining the code could see that there are extra values.
+        # Hence the following two lines. Pfft.
+        del columns[8] 
+        del columns[6] 
+
         car_dictionary[key] = columns
     
     return car_dictionary
 
-def best_mpg(parameter1, parameter2):
+def best_mpg(car_dictionary, country):
+    """
+        Given the car dictionary and country, returns the mpg of the
+        highest-mpg car in the dictionary that is in that country.
+    """
+    best_mpg = -9999.0
+    for value in car_dictionary.values():
+        current_country = value[6]
+        if current_country == country:
+            current_mpg = float(value[0])
+            if current_mpg > best_mpg:
+                best_mpg = current_mpg
+
+    return best_mpg
+
+def worst_mpg(car_dictionary, country):
+    """
+        Given the car dictionary and country, returns the mpg of the
+        lowest-mpg car in the dictionary that is in that country.
+    """
+    worst_mpg = 9999.0
+    for value in car_dictionary.values():
+        current_country = value[6]
+        if current_country == country:
+            current_mpg = float(value[0])
+            if current_mpg < worst_mpg:
+                worst_mpg = current_mpg
+
+    return worst_mpg
+
+def average_mpg(car_dictionary, country):
+    """
+        Given the car dictionary and country, returns the average mpg
+        of all the cars manufactured in that country.
+    """
+    total_mpg = 0.0
+    number_of_cars = 0
+    for value in car_dictionary.values():
+        current_country = value[6]
+        if current_country == country:
+            current_mpg = float(value[0])
+            total_mpg += current_mpg
+            number_of_cars += 1
+
+    return total_mpg / number_of_cars
+
+
+def print_models_above(car_dictionary, country, mpg):
     pass
 
-def worst_mpg(parameter1, parameter2):
-    pass
-
-def average_mpg(parameter1, parameter2):
-    pass
-
-def print_models_above(parameter1, parameter2, parameter3):
-    pass
-
-def print_models_below(parameter1, parameter2, parameter3):
+def print_models_below(car_dictionary, country, mpg):
     pass
 
 def get_menu_choice_from_user():
@@ -56,6 +105,7 @@ def get_menu_choice_from_user():
         Print the menu, collect the user's choice, and validate it.
         Returns 0 when the choice was not valid.
     """
+    print()
     print("(1) Get best mpg by country")
     print("(2) Get worst mpg by country")
     print("(3) Get average mpg by country")
@@ -110,7 +160,7 @@ def get_menu_choice_and_country_from_user():
 
     return menu_choice, chosen_country
 
-def get_filename():
+def get_filename_from_user():
     """
         Prompt the user and collect a filename from them
     """
@@ -121,11 +171,32 @@ def get_filename():
 
 # -------- MAIN --------
 
-filename = get_filename()
+filename = get_filename_from_user()
 lines = read_file(filename)
 car_dictionary = build_car_dictionary(lines)
-print(car_dictionary)
 
 menu_choice = 0
 while menu_choice != 6:
     menu_choice, chosen_country = get_menu_choice_and_country_from_user()
+
+    if menu_choice == 1:
+        best = best_mpg(car_dictionary, chosen_country)
+        # This output string isn't in the instructions, only an example
+        print(f"Best mpg from {chosen_country} is {best:.2f}")
+
+    elif menu_choice == 2:
+        worst = worst_mpg(car_dictionary, chosen_country)
+        # This output string isn't in either the instructions or an example;
+        # have to assume what it's supposed to be and see what the tests say.
+        print(f"Worst mpg from {chosen_country} is {worst:.2f}")
+
+    elif menu_choice == 3:
+        average = average_mpg(car_dictionary, chosen_country)
+        # This output string isn't in the instructions, only an example
+        print(f"Average mpg from {chosen_country} is {average:.2f}")
+
+    elif menu_choice == 4:
+        pass
+
+    elif menu_choice == 5:
+        pass
