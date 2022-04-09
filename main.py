@@ -99,7 +99,7 @@ def average_mpg(car_dictionary, country):
 def print_models_above(car_dictionary, country, min_mpg):
     """
         Prints a report of all the models in the dictionary having
-        an mpg higher than the requested mpg in the provided country.
+        an mpg higher than (or equal to) the requested mpg in the provided country.
     """
     print(f"Models from {country} with {min_mpg:.2f} or better:")
     print(f"Model                                    Weight     Horsepower    Miles Per Gallon")
@@ -118,7 +118,7 @@ def print_models_above(car_dictionary, country, min_mpg):
 def print_models_below(car_dictionary, country, max_mpg):
     """
         Prints a report of all the models in the dictionary having
-        an mpg higher than the requested mpg in the provided country.
+        an mpg lower than (or equal to) the requested mpg in the provided country.
     """
     print(f"Models from {country} with {max_mpg:.2f} or lower:")
     print(f"Model                                    Weight     Horsepower    Miles Per Gallon")
@@ -135,10 +135,16 @@ def print_models_below(car_dictionary, country, max_mpg):
                 print(f"{model:<40}{weight:>7}{horsepower:>15}{mpg:>20.2f}")
 
 def get_min_mpg_from_user():
+    """
+        Retrieves a minimum mpg from the user
+    """
     print("Enter the mpg value models must be at or over:")
     return float(input())
 
 def get_max_mpg_from_user():
+    """
+        Retrieves a maximum mpg from the user
+    """
     print("Enter the mpg value models must be at or under:")
     return float(input())
 
